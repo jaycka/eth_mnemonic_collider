@@ -26,9 +26,21 @@ while True:
     keccak_hash.update(public_key_bytes[1:])
     h = keccak_hash.hexdigest()
     address = '0x' + h[-40:]
-    address = w3.toChecksumAddress(address)
-    balance = w3.eth.get_balance(address,'latest')
-    print(i,priv,address,balance)
-    if balance != 0:
-        break
+    try:
+        address = w3.toChecksumAddress(address)
+        balance = w3.eth.get_balance(address,'latest')
+        print(i,priv,address,balance)
+        if balance != 0:
+            with open(str(address)+'.txt', 'w') as f:
+                f.write(i,priv,address,balance)
+            break
+    except:
+        time.sleep(60)
+        address = w3.toChecksumAddress(address)
+        balance = w3.eth.get_balance(address,'latest')
+        print(i,priv,address,balance)
+        if balance != 0:
+            with open(str(address)+'.txt', 'w') as f:
+                f.write(i,priv,address,balance)
+            break
     
